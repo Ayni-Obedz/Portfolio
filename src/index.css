@@ -1,0 +1,22 @@
+@import "tailwindcss"; /* Tailwind v3? use @tailwind base; @tailwind components; @tailwind utilities; */
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: "Poppins", system-ui, sans-serif;
+  background: #0b0726;
+  color: #fff;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.08); }
+}
+.animate-float { animation: float 9s ease-in-out infinite; }
+.animate-float-slow { animation: float 14s ease-in-out infinite reverse; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.5s ease-out; }
