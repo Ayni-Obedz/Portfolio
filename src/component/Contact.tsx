@@ -36,28 +36,3 @@ export default function Contact() {
 }
 
 
-// import Reveal from "./Reveal";
-
-// export default function Contact() {
-//   return (
-//     <section id="contact" className="mx-auto max-w-4xl px-6 py-24">
-//       <Reveal>
-//         <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#3a2a8c] to-[#1a0f4d] p-10 text-center sm:p-16">
-//           <h2 className="text-3xl font-bold sm:text-4xl">Have a project in mind?</h2>
-//           <p className="mx-auto mt-4 max-w-md text-[#b9b4e0]">
-//             Let's cut something great together. Send a message and I'll get back to you.
-//           </p>
-//           <a
-//             href="mailto:you@example.com"
-//             className="mt-8 inline-block rounded-full bg-[#12b5ff] px-8 py-3 text-sm font-semibold text-[#0b0726] shadow-[0_0_30px_#12b5ff66] transition hover:-translate-y-0.5"
-//           >
-//             Say Hello
-//           </a>
-//         </div>
-//       </Reveal>
-//       <p className="mt-16 text-center text-xs text-[#b9b4e0]/70">
-//         © {new Date().getFullYear()} All rights reserved.
-//       </p>
-//     </section>
-//   );
-// }
