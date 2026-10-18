@@ -306,6 +306,8 @@ export default function Services({ mode, onModeChange }: Props) {
 
           {images.length > 0 &&
             (carouselItems.length > 0 ? (
+
+              
               <div key={workKey} className="relative h-560px w-full">
                 <FlexCarousel
                   items={carouselItems}
