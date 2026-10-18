@@ -371,7 +371,7 @@ const Digits = ({ value }: { value: number }) => (
       .map((digit, index) => (
         <span key={index} className="inline-block h-[1em] overflow-hidden">
           <span
-            className="flex flex-col transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+            className="flex flex-col transition-transform duration-600ms ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
             style={{ transform: `translateY(${-Number(digit) * 10}%)` }}
           >
             {'0123456789'.split('').map(n => (
@@ -1371,7 +1371,7 @@ const FlexCarousel = ({
   return (
     <div
       ref={containerRef}
-      className={`relative h-full w-full cursor-grab touch-pan-y select-none overflow-hidden overscroll-contain outline-none [-webkit-tap-highlight-color:transparent] focus-visible:shadow-[inset_0_0_0_2px_rgba(128,128,140,0.55)] data-[hover=open]:cursor-zoom-in data-[hover=close]:cursor-zoom-out data-[dragging]:cursor-grabbing ${className}`.trim()}
+      className={`relative h-full w-full cursor-grab touch-pan-y select-none overflow-hidden overscroll-contain outline-none [-webkit-tap-highlight-color:transparent] focus-visible:shadow-[inset_0_0_0_2px_rgba(128,128,140,0.55)] data-[hover=open]:cursor-zoom-in data-[hover=close]:cursor-zoom-out data-dragging:cursor-grabbing ${className}`.trim()}
       style={{ ...style, '--flex-carousel-half': `${Math.min(Math.max(cardHeight, 0.05), 1) * 50}%` } as CSSProperties}
       role="region"
       aria-roledescription="carousel"
@@ -1381,7 +1381,7 @@ const FlexCarousel = ({
       <style>{STYLE}</style>
       {captions && current && revealed && (
         <div
-          className="pointer-events-none absolute inset-x-0 top-[calc(50%_+_var(--flex-carousel-half)_*_var(--flex-carousel-lift,1)_+_22px)] flex flex-col items-center gap-1.5 px-4 text-center animate-[flex-carousel-reveal_900ms_ease_both] motion-reduce:animate-none"
+          className="pointer-events-none absolute inset-x-0 top-calc(50%_+_var(--flex-carousel-half)_*_var(--flex-carousel-lift,1)_+_22px) flex flex-col items-center gap-1.5 px-4 text-center animate-[flex-carousel-reveal_900ms_ease_both] motion-reduce:animate-none"
           aria-hidden="true"
         >
           <span
@@ -1392,7 +1392,7 @@ const FlexCarousel = ({
             {current.subtitle && <span className="font-normal opacity-60">{current.subtitle}</span>}
           </span>
           <span
-            className="inline-flex items-center gap-[3px] text-[12px] leading-none tabular-nums opacity-50 transition-opacity duration-[400ms] data-[hidden]:opacity-0"
+            className="inline-flex items-center gap-3px text-[12px] leading-none tabular-nums opacity-50 transition-opacity duration-400ms data-hidden:opacity-0"
             data-hidden={focusOpen ? '' : undefined}
           >
             <Digits value={active + 1} />
