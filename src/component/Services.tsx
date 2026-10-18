@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { site, type Mode, type WorkItem } from "../data/site";
+import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { site, type Mode, type Venture, type WorkItem } from "../data/site";
 import FlexCarousel from "./FlexCarousel";
 import Reveal from "./Reveal";
 
@@ -9,6 +10,131 @@ const tabs: { id: Mode; label: string }[] = [
   { id: "edit", label: "The Edit" },
   { id: "beyond", label: "Beyond the Edit" },
 ];
+
+type ServiceCardProps = {
+  index: number;
+  title: string;
+  text: string;
+  active?: boolean;
+  onClick?: () => void;
+};
+
+function ServiceCard({ index, title, text, active, onClick }: ServiceCardProps) {
+  const base =
+    "min-w-0 rounded-2xl border bg-[#3a2a8c]/60 p-7 text-left backdrop-blur transition [overflow-wrap:anywhere] hover:-translate-y-2";
+
+  const content = (
+    <>
+      <div className="mb-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#12b5ff]/15 font-bold text-[#12b5ff]">
+        0{index + 1}
+      </div>
+      <h3 className="mb-2 font-semibold">{title}</h3>
+      <p className="text-sm leading-relaxed text-[#b9b4e0]">{text}</p>
+      {onClick && <p className="mt-4 text-xs font-semibold text-[#12b5ff]">View work & contact →</p>}
+    </>
+  );
+
+  if (!onClick) {
+    return <div className={`${base} border-white/10 hover:border-[#12b5ff]/60`}>{content}</div>;
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`${base} ${
+        active
+          ? "border-[#12b5ff] shadow-[0_0_30px_#12b5ff33]"
+          : "border-white/10 hover:border-[#12b5ff]/60"
+      }`}
+    >
+      {content}
+    </button>
+  );
+}
+
+type ContactSheetProps = { open: boolean; onClose: () => void; venture: Venture };
+
+function ContactSheet({ open, onClose, venture }: ContactSheetProps) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open, onClose]);
+
+  return createPortal(
+    <>
+      <div
+        onClick={onClose}
+        aria-hidden="true"
+        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${venture.title} contact info`}
+        aria-hidden={!open}
+        className={`fixed right-0 top-0 z-[70] flex h-full w-full max-w-md flex-col border-l border-white/10 bg-[#140c3d] p-8 shadow-2xl transition-[transform,visibility] duration-300 ${
+          open ? "visible translate-x-0" : "invisible translate-x-full"
+        }`}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#12b5ff]">Contact</p>
+            <h3 className="mt-2 text-2xl font-bold [overflow-wrap:anywhere]">{venture.title}</h3>
+          </div>
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={onClose}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-[#b9b4e0] transition hover:border-[#12b5ff] hover:text-[#12b5ff]"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="h-5 w-5">
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+
+        <p className="mt-4 text-sm leading-relaxed text-[#b9b4e0] [overflow-wrap:anywhere]">{venture.text}</p>
+
+        <div className="mt-8 space-y-3 overflow-y-auto">
+          {venture.contacts.map((c) => (
+            <a
+              key={c.label}
+              href={c.href}
+              target="_blank"
+              rel="noreferrer"
+              className="block rounded-xl border border-white/10 bg-[#0b0726]/40 p-4 transition hover:border-[#12b5ff]/60"
+            >
+              <p className="text-xs uppercase tracking-widest text-[#12b5ff]">{c.label}</p>
+              <p className="mt-1 font-medium [overflow-wrap:anywhere]">{c.value}</p>
+            </a>
+          ))}
+        </div>
+
+        <a
+          href="#featured"
+          onClick={onClose}
+          className="mt-auto rounded-full bg-[#12b5ff] px-6 py-3 text-center text-sm font-semibold text-[#0b0726] transition hover:-translate-y-0.5"
+        >
+          View featured work
+        </a>
+      </aside>
+    </>,
+    document.body,
+  );
+}
 
 function VideoShowcase({ videos }: { videos: WorkItem[] }) {
   const [open, setOpen] = useState(false); // change to true to start expanded
@@ -97,9 +223,17 @@ function VideoShowcase({ videos }: { videos: WorkItem[] }) {
 }
 
 export default function Services({ mode, onModeChange }: Props) {
-  const services = site.services[mode];
-  const work = site.work[mode];
-   const videos = work.filter((w) => w.type === "video");
+  const ventures = site.ventures;
+  const [selectedId, setSelectedId] = useState(ventures[0].id);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const closeSheet = useCallback(() => setSheetOpen(false), []);
+
+  const venture = ventures.find((v) => v.id === selectedId) ?? ventures[0];
+  const services: { title: string; text: string }[] = mode === "edit" ? site.services.edit : ventures;
+  const work: WorkItem[] = mode === "edit" ? site.work.edit : venture.work;
+  const workKey = mode === "edit" ? "edit" : venture.id;
+
+  const videos = work.filter((w) => w.type === "video");
   const images = work.filter((w) => w.type === "image");
   const carouselItems = images
     .filter((i) => i.src)
@@ -136,35 +270,43 @@ export default function Services({ mode, onModeChange }: Props) {
       </Reveal>
 
       <div key={mode} className="animate-fade-in">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-6">
           {services.map((s, i) => (
-            <div
+            <ServiceCard
               key={s.title}
-              className="rounded-2xl border border-white/10 bg-[#3a2a8c]/60 p-7 backdrop-blur transition hover:-translate-y-2 hover:border-[#12b5ff]/60"
-            >
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[#12b5ff]/15 font-bold text-[#12b5ff]">
-                0{i + 1}
-              </div>
-              <h3 className="mb-2 font-semibold">{s.title}</h3>
-              <p className="text-sm leading-relaxed text-[#b9b4e0]">{s.text}</p>
-            </div>
+              index={i}
+              title={s.title}
+              text={s.text}
+              active={mode === "beyond" && ventures[i].id === selectedId}
+              onClick={
+                mode === "beyond"
+                  ? () => {
+                      setSelectedId(ventures[i].id);
+                      setSheetOpen(true);
+                    }
+                  : undefined
+              }
+            />
           ))}
         </div>
 
-                <div id="featured" className="mt-20 scroll-mt-24">
+        <div id="featured" className="mt-20 scroll-mt-24">
           <h3 className="mb-8 text-2xl font-bold">
             Featured <span className="text-[#12b5ff]">Work</span>
+            {mode === "beyond" && (
+              <span className="ml-3 text-base font-normal text-[#b9b4e0]">· {venture.title}</span>
+            )}
           </h3>
 
           {videos.length > 0 && (
             <div className="mb-10">
-              <VideoShowcase videos={videos} />
+              <VideoShowcase key={workKey} videos={videos} />
             </div>
           )}
 
           {images.length > 0 &&
             (carouselItems.length > 0 ? (
-              <div className="relative h-560px w-full">
+              <div key={workKey} className="relative h-560px w-full">
                 <FlexCarousel
                   items={carouselItems}
                   preset="liquid"
@@ -198,6 +340,8 @@ export default function Services({ mode, onModeChange }: Props) {
             ))}
         </div>
       </div>
+
+      <ContactSheet open={sheetOpen && mode === "beyond"} onClose={closeSheet} venture={venture} />
     </section>
   );
 }

@@ -18,7 +18,8 @@ export default function Navbar({ onSelectMode }: Props) {
           <span className="flex text-[#12b5ff]"></span>
           Frame
           <span className="flex text-[#12b5ff]">Fusion
-            <img className = " h-15" src="public/EDIT vid&img/Zoro.jpg" alt="" />
+            {/* //LOGO IMAGE// */}
+            <img className = " h-15" src="" alt="" />
           </span>
         </a>
 
