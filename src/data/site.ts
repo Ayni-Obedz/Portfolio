@@ -1,6 +1,14 @@
 export type Mode = "edit" | "beyond";
 export type NavItem = { label: string; href: string; mode?: Mode };
 export type WorkItem = { type: "image" | "video"; title: string; src: string; subtitle?: string };
+export type ContactItem = { label: string; value: string; href: string };
+export type Venture = {
+  id: string;
+  title: string;
+  text: string;
+  work: WorkItem[];
+  contacts: ContactItem[];
+};
 const editWork: WorkItem[] = [
   { type: "video", title: "Project One", src: "/EDIT vid&img/ifreke.mp4" },
   { type: "video", title: "Project Two", src: "/EDIT vid&img/kunle.mp4" },
@@ -26,10 +34,43 @@ const editWork: WorkItem[] = [
 
 ];
 
-const beyondWork: WorkItem[] = [
-  { type: "image", title: "Framing Work One", src: "" },
-  { type: "image", title: "Framing Work Two", src: "" },
-  { type: "image", title: "Fram Fusion", src: "" },
+const ventures: Venture[] = [
+  {
+    id: "framing",
+    title: "light big banner",
+    text: "describe the framing service here. forgot what you called that work",
+    work: [
+      { type: "image", title: "Framing One", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjgLFOv2aKZrNdhU0GYkyorCWAFQ1NrZaeKs-KlhWsiQ&s=10" }, // e.g. "/work/framing1.jpg"
+      { type: "image", title: "Framing Two", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2gbZ8LF4l-n-5v6BQLKC1N0xhb6Tzf0UPsXmRgVZSfw&s=10" },
+      { type: "image", title: "Framing Three", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyFmnkHMyrLgfhPTDmOXRHhJY4HQlnHIrgM1ubbgYMUg&s=10" },
+      { type: "image", title: "Four", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSoK-HxA98f1NpECqo95nvB-VEEFLQrbOiYVsZoTv_WA&s=10"},
+      { type: "image", title: "Five", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ2dow4UDq85uISsk9QDP1xn0pUkL9wfX-OtSy876zdw&s=10"},
+      { type: "image", title: "six", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7XjgvgFGr0ZYL2VnI61iU5OKQltAeR5g0rHuhP0QriQ&s=10"},
+    ],
+    contacts: [
+      { label: "Email", value: "framing@example.com", href: "mailto:framing@example.com" },
+      { label: "WhatsApp", value: "+234 000 000 0000", href: "https://wa.me/2340000000000" },
+      { label: "Instagram", value: "@yourhandle", href: "https://instagram.com/yourhandle" },
+    ],
+  },
+  {
+    id: "fram-fusion",
+    title: "Frame Fusion",
+    text: " describe the business here.",
+    work: [
+      { type: "image", title: "Fusion One", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCpt5neB44uC1hkI8yRAhPYgL484i5mwyEKtPuw4gDcA&s=10" },
+      { type: "image", title: "Fusion Two", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROdyVCWz4M3MEB9aVriPpE4Pb77jF8NKF-HnaHi_81Aw&s" },
+      { type: "image", title: "Fusion Three", src: "/EDIT vid&img/three.jpeg" },
+      { type: "image", title: "Fusion four", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7L2J2m2my0jy6AZ9z4TNbuiTkf0Omcumx9Vo-vKg63Q&s=10"},
+      { type: "image", title: "Fusion five", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeWUx0msI3qmcfJOcYT43Ocuw_SFckd2N3O33ul0tYkQ&s"},
+      { type: "image", title: "Fusion six", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiPiv06Ro2o9XVFDQjUeg1QNlVPXUx6VCe7TgRajR-6Q&s=10"},
+    ],
+    contacts: [
+      { label: "Email", value: "framfusion@example.com", href: "mailto:framfusion@example.com" },
+      { label: "WhatsApp", value: "+234 000 000 0000", href: "https://wa.me/2340000000000" },
+      { label: "Instagram", value: "@framfusion", href: "https://instagram.com/framfusion" },
+    ],
+  },
 ];
 
 export const site = {
@@ -37,7 +78,7 @@ export const site = {
   lastName: "Ifreke",
   role: "Video Editor",
   location: "Nigeria based",
-  portrait: "",
+  portrait: "/Profile/lockedin.jpeg",
 
    nav: [
     { label: "Services", href: "#services", mode: "edit" },
@@ -53,12 +94,9 @@ services: {
       { title: "Motion & Titles", text: "Titles, transitions and motion that match your brand." },
       { title: "Graphic Design", text: "Thumbnails and visuals that support the video." },
     ],
-    beyond: [
-      { title: "!!!", text: "Placeholder: describe the framing service here." },
-      { title: "Frame Fusion", text: "Placeholder: describe the business here." },
-    ],
   },
-  work: { edit: editWork, beyond: beyondWork },
+  work: { edit: editWork},
+  ventures,
 contacts: [
     { label: "Email", value: "you@example.com", href: "mailto:you@example.com" },
     { label: "WhatsApp", value: "+234 000 000 0000", href: "https://wa.me/2340000000000" },
