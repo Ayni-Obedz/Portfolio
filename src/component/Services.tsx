@@ -76,7 +76,7 @@ function ContactSheet({ open, onClose, venture }: ContactSheetProps) {
       <div
         onClick={onClose}
         aria-hidden="true"
-        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`fixed inset-0 z-60 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
@@ -85,14 +85,14 @@ function ContactSheet({ open, onClose, venture }: ContactSheetProps) {
         aria-modal="true"
         aria-label={`${venture.title} contact info`}
         aria-hidden={!open}
-        className={`fixed right-0 top-0 z-[70] flex h-full w-full max-w-md flex-col border-l border-white/10 bg-[#140c3d] p-8 shadow-2xl transition-[transform,visibility] duration-300 ${
+        className={`fixed right-0 top-0 z-70 flex h-full w-full max-w-md flex-col border-l border-white/10 bg-[#140c3d] p-8 shadow-2xl transition-[transform,visibility] duration-300 ${
           open ? "visible translate-x-0" : "invisible translate-x-full"
         }`}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#12b5ff]">Contact</p>
-            <h3 className="mt-2 text-2xl font-bold [overflow-wrap:anywhere]">{venture.title}</h3>
+            <h3 className="mt-2 text-2xl font-bold overflow-wrap:anywhere">{venture.title}</h3>
           </div>
           <button
             type="button"
@@ -106,7 +106,7 @@ function ContactSheet({ open, onClose, venture }: ContactSheetProps) {
           </button>
         </div>
 
-        <p className="mt-4 text-sm leading-relaxed text-[#b9b4e0] [overflow-wrap:anywhere]">{venture.text}</p>
+        <p className="mt-4 text-sm leading-relaxed text-[#b9b4e0] overflow-wrap:anywhere">{venture.text}</p>
 
         <div className="mt-8 space-y-3 overflow-y-auto">
           {venture.contacts.map((c) => (
@@ -118,7 +118,7 @@ function ContactSheet({ open, onClose, venture }: ContactSheetProps) {
               className="block rounded-xl border border-white/10 bg-[#0b0726]/40 p-4 transition hover:border-[#12b5ff]/60"
             >
               <p className="text-xs uppercase tracking-widest text-[#12b5ff]">{c.label}</p>
-              <p className="mt-1 font-medium [overflow-wrap:anywhere]">{c.value}</p>
+              <p className="mt-1 font-medium overflow-wrap:anywhere">{c.value}</p>
             </a>
           ))}
         </div>
